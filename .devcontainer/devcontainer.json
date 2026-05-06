@@ -1,0 +1,8 @@
+{
+  "name": "MikroTik CHR Test",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "postCreateCommand": "docker run -d --name mikrotik-prueba --privileged --platform linux/amd64 -p 2223:22 -p 8729:8728 cnsoluciones/mikrotik:latest && echo 'MikroTik iniciado. SSH disponible en 30s: ssh admin@localhost -p 2223'"
+}
