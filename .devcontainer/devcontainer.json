@@ -4,5 +4,5 @@
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
-  "postCreateCommand": "docker run -d --name mikrotik-prueba --privileged --platform linux/amd64 -p 2223:22 -p 8729:8728 cnsoluciones/mikrotik:latest && echo 'MikroTik iniciado. SSH disponible en 30s: ssh admin@localhost -p 2223'"
+  "postCreateCommand": "docker run -d --name mikrotik-prueba --privileged --platform linux/amd64 -p 2223:22 -p 8729:8728 -p 8291:8291 -p 8080:80 cnsoluciones/mikrotik:latest && echo 'Esperando 60s a que MikroTik inicie...' && sleep 60 && docker exec mikrotik-prueba sh -c 'cat > /tmp/conf.rsc << EOF\n/ip dns set servers=8.8.8.8\n/ip service enable www\n/ip service enable winbox\n/ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade\n/ip service enable api\nEOF\n' && docker exec mikrotik-prueba sh -c 'cat /tmp/conf.rsc | nc localhost 23' && echo 'MikroTik configurado y listo. SSH: ssh admin@localhost -p 2223'"
 }
